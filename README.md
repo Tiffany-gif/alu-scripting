@@ -1,1 +1,1 @@
-# alu-scripting
+This repo contains scripting projects
