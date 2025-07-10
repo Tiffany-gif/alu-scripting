@@ -1,21 +1,26 @@
 #!/usr/bin/python3
-"""Exporting csv files (but actually just prints top 10 hot posts). """
+"""
+Script to print hot posts on a given Reddit subreddit.
+"""
+
 import requests
 
 
 def top_ten(subreddit):
-    """Read Reddit API and print top 10 hot posts titles for a subreddit."""
-    headers = {'User-Agent': 'python:holberton.topten:v1.0 (by /u/ledbag123)'}
-    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    """Print the titles of the 10 hottest posts on a given subreddit."""
+    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
 
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    if response.status_code == 200:
-        try:
-            posts = response.json()['data']['children']
-            for post in posts[:10]:
-                print(post['data']['title'])
-        except Exception:
-            print(None)
-    else:
-        print(None)
+    headers = {
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
+    }
+    params = {
+        "limit": 10
+    }
+    response = requests.get(url, headers=headers, params=params,
+                            allow_redirects=False)
+    if response.status_code == 404:
+        print("None")
+        return
+results = response.json().get("data")
+    
+[print(c.get("data").get("title")) for c in results.get("children")]
