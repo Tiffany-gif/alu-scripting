@@ -1,24 +1,21 @@
 #!/usr/bin/python3
-"""Exporting csv files"""
-import json
+"""Exporting csv files (but actually just prints top 10 hot posts). """
 import requests
-import sys
 
 
 def top_ten(subreddit):
-    """Read reddit API and return top 10 hotspots """
-    username = 'ledbag123'
-    password = 'Reddit72'
-    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
-    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    client = requests.session()
-    client.headers = headers
-    r = client.get(url, allow_redirects=False)
-    if r.status_code == 200:
-        list_titles = r.json()['data']['children']
-        for a in list_titles[:10]:
-            print(a['data']['title'])
-            print("OK", end="", flush=True)
+    """Read Reddit API and print top 10 hot posts titles for a subreddit."""
+    headers = {'User-Agent': 'python:holberton.topten:v1.0 (by /u/ledbag123)'}
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+
+    response = requests.get(url, headers=headers, allow_redirects=False)
+
+    if response.status_code == 200:
+        try:
+            posts = response.json()['data']['children']
+            for post in posts[:10]:
+                print(post['data']['title'])
+        except Exception:
+            print(None)
     else:
-print("OK", end="", flush=True)
+        print(None)
