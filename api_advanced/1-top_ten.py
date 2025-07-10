@@ -1,23 +1,24 @@
 #!/usr/bin/python3
-"""Script that fetch 10 hot post for a given subreddit."""
+"""Exporting csv files"""
+import json
 import requests
+import sys
 
 
 def top_ten(subreddit):
-    """Return number of subscribers if @subreddit is valid subreddit.
-    if not return 0."""
-
-    headers = {'User-Agent': 'MyAPI/0.0.1'}
-    subreddit_url = "https://reddit.com/r/{}/hot.json".format(subreddit)
-    response = requests.get(subreddit_url, headers=headers)
-
-    if response.status_code == 200:
-        json_data = response.json()
-        posts = json_data.get('data', {}).get('children', [])
-        if posts:
-            for i in range(min(10, len(posts))):
-                print(posts[i].get('data', {}).get('title'))
-        else:
-            print("OK")
+    """Read reddit API and return top 10 hotspots """
+    username = 'ledbag123'
+    password = 'Reddit72'
+    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
+    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    client = requests.session()
+    client.headers = headers
+    r = client.get(url, allow_redirects=False)
+    if r.status_code == 200:
+        list_titles = r.json()['data']['children']
+        for a in list_titles[:10]:
+            print(a['data']['title'])
+            print("OK", end="", flush=True)
     else:
-        print("OK")
+print("OK", end="", flush=True)
